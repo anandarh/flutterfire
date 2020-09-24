@@ -48,7 +48,7 @@ Note: When you are debugging on Android, use a device or AVD with Google Play se
 4. (optional, but recommended) If want to be notified in your app (via `onResume` and `onLaunch`, see below) when the user clicks on a notification in the system tray include the following `intent-filter` within the `<activity>` tag of your `android/app/src/main/AndroidManifest.xml`:
   ```xml
   <intent-filter>
-      <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+      <action android:name="FCM_PLUGIN_ACTIVITY" />
       <category android:name="android.intent.category.DEFAULT" />
   </intent-filter>
   ```
@@ -209,7 +209,7 @@ Messages are sent to your Flutter app via the `onMessage`, `onLaunch`, and `onRe
 
 |                             | App in Foreground | App in Background | App Terminated |
 | --------------------------: | ----------------- | ----------------- | -------------- |
-| **Notification on Android** | `onMessage` | Notification is delivered to system tray. When the user clicks on it to open app `onResume` fires if `click_action: FLUTTER_NOTIFICATION_CLICK` is set (see below). | Notification is delivered to system tray. When the user clicks on it to open app `onLaunch` fires if `click_action: FLUTTER_NOTIFICATION_CLICK` is set (see below). |
+| **Notification on Android** | `onMessage` | Notification is delivered to system tray. When the user clicks on it to open app `onResume` fires if `click_action: FCM_PLUGIN_ACTIVITY` is set (see below). | Notification is delivered to system tray. When the user clicks on it to open app `onLaunch` fires if `click_action: FCM_PLUGIN_ACTIVITY` is set (see below). |
 | **Notification on iOS** | `onMessage` | Notification is delivered to system tray. When the user clicks on it to open app `onResume` fires. | Notification is delivered to system tray. When the user clicks on it to open app `onLaunch` fires. |
 | **Data Message on Android** | `onMessage` | `onMessage` while app stays in the background. | *not supported by plugin, message is lost* |
 | **Data Message on iOS**     | `onMessage` | Message is stored by FCM and delivered to app via `onMessage` when the app is brought back to foreground. | Message is stored by FCM and delivered to app via `onMessage` when the app is brought back to foreground. |
@@ -232,14 +232,14 @@ Future<void> _handleNotification (Map<dynamic, dynamic> message, bool dialog) as
 ````
 
 ## Sending Messages
-Refer to the [Firebase documentation](https://firebase.google.com/docs/cloud-messaging/) about FCM for all the details about sending messages to your app. When sending a notification message to an Android device, you need to make sure to set the `click_action` property of the message to `FLUTTER_NOTIFICATION_CLICK`. Otherwise the plugin will be unable to deliver the notification to your app when the users clicks on it in the system tray.
+Refer to the [Firebase documentation](https://firebase.google.com/docs/cloud-messaging/) about FCM for all the details about sending messages to your app. When sending a notification message to an Android device, you need to make sure to set the `click_action` property of the message to `FCM_PLUGIN_ACTIVITY`. Otherwise the plugin will be unable to deliver the notification to your app when the users clicks on it in the system tray.
 
-For testing purposes, the simplest way to send a notification is via the [Firebase Console](https://firebase.google.com/docs/cloud-messaging/send-with-console). Make sure to include `click_action: FLUTTER_NOTIFICATION_CLICK` as a "Custom data" key-value-pair (under "Advanced options") when targeting an Android device. The Firebase Console does not support sending data messages.
+For testing purposes, the simplest way to send a notification is via the [Firebase Console](https://firebase.google.com/docs/cloud-messaging/send-with-console). Make sure to include `click_action: FCM_PLUGIN_ACTIVITY` as a "Custom data" key-value-pair (under "Advanced options") when targeting an Android device. The Firebase Console does not support sending data messages.
 
 Alternatively, a notification or data message can be sent from a terminal:
 
 ```shell
-DATA='{"notification": {"body": "this is a body","title": "this is a title"}, "priority": "high", "data": {"click_action": "FLUTTER_NOTIFICATION_CLICK", "id": "1", "status": "done"}, "to": "<FCM TOKEN>"}'
+DATA='{"notification": {"body": "this is a body","title": "this is a title"}, "priority": "high", "data": {"click_action": "FCM_PLUGIN_ACTIVITY", "id": "1", "status": "done"}, "to": "<FCM TOKEN>"}'
 curl https://fcm.googleapis.com/fcm/send -H "Content-Type:application/json" -X POST -d "$DATA" -H "Authorization: key=<FCM SERVER KEY>"
 ```
 
@@ -271,7 +271,7 @@ Future<Map<String, dynamic>> sendAndRetrieveMessage() async {
        },
        'priority': 'high',
        'data': <String, dynamic>{
-         'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+         'click_action': 'FCM_PLUGIN_ACTIVITY',
          'id': '1',
          'status': 'done'
        },
