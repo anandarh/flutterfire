@@ -1,3 +1,19 @@
+## 0.2.2
+
+ - **FEAT**: bump compileSdkVersion to 29 (#3975).
+ - **FEAT**: update Firebase iOS SDK version to 6.33.0 (from 6.26.0).
+
+## 0.2.1+1
+
+ - **FIX**: Change minimum version of stack_trace package (#3639).
+ - **DOCS**: README updates (#3768).
+
+## 0.2.1
+
+ - **REFACTOR**: changes context to reason (#1542) (#3334).
+ - **FEAT**: rework (#3420).
+ - **CHORE**: firebase_crashlytics v0.2.0 release.
+
 ## 0.2.0
 
 For help migrating to this release please see the [migration guide](https://firebase.flutter.dev/docs/migration).
